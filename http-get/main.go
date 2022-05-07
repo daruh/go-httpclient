@@ -8,9 +8,14 @@ import (
 
 func main() {
 
-	url := "https://api.github.com"
+	url := "http://localhost:8080"
 	client := http.Client{}
-	response, err := client.Get(url)
+
+	request, err := http.NewRequest("GET", url, nil)
+	request.Header.Set("Accept", "application/json")
+
+	response, err := client.Do(request)
+
 	if err != nil {
 		panic(err)
 	}
