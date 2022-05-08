@@ -4,11 +4,24 @@ import (
 	"fmt"
 	"github.com/daruh/go-httpclient/gohttp"
 	"io/ioutil"
+	"net/http"
 )
 
-func main() {
-	client := gohttp.New()
+var client = getGithubClient()
 
+func getGithubClient() gohttp.HttpClient {
+	client := gohttp.New()
+	commonHeaders := make(http.Header)
+	commonHeaders.Set("Authorization", "Bearer ABC-123")
+	client.SetHeaders(commonHeaders)
+	return client
+}
+
+func main() {
+
+	getUrls()
+}
+func getUrls() {
 	resposne, err := client.Get("https://api.github.com", nil)
 	if err != nil {
 		panic(err)
