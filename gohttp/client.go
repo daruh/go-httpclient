@@ -1,14 +1,31 @@
 package gohttp
 
-import "net/http"
+import (
+	"net"
+	"net/http"
+	"time"
+)
 
 type httpClient struct {
+	client  *http.Client
 	Headers http.Header
 }
 
 func New() HttpClient {
-	client := &httpClient{}
-	return client
+	client := http.Client{
+		Transport: &http.Transport{
+			MaxIdleConnsPerHost:   5,
+			ResponseHeaderTimeout: 5 * time.Second,
+			DialContext: (&net.Dialer{
+				Timeout: 1 * time.Second,
+			}).DialContext,
+		},
+	}
+
+	httpClient := &httpClient{
+		client: &client,
+	}
+	return httpClient
 }
 
 type HttpClient interface {
