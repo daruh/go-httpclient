@@ -94,7 +94,7 @@ func (c *httpClient) getRequestHeaders(headers http.Header) http.Header {
 
 	result := make(http.Header)
 
-	for header, value := range c.Headers {
+	for header, value := range c.headers {
 		if len(value) > 0 {
 			result.Set(header, value[0])
 		}

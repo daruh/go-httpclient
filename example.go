@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"github.com/daruh/go-httpclient/gohttp"
 	"io/ioutil"
-	"net/http"
-	"time"
 )
 
 var client = getGithubClient()
@@ -15,16 +13,12 @@ type User struct {
 	LastName  string `json:"last_name"`
 }
 
-func getGithubClient() gohttp.HttpClient {
-	client := gohttp.New()
+func getGithubClient() gohttp.Client {
+	client := gohttp.NewBuilder().
+		DisableTimeouts(true).
+		SetMaxIdleConnections(5).
+		Build()
 
-	client.SetConnectionTimeout(20 * time.Second)
-	client.SetResponseTimeout(2 * time.Millisecond)
-	client.SetMaxIdleConnections(20)
-
-	commonHeaders := make(http.Header)
-	commonHeaders.Set("Authorization", "Bearer ABC-123")
-	client.SetHeaders(commonHeaders)
 	return client
 }
 
