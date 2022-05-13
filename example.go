@@ -5,6 +5,7 @@ import (
 	"github.com/daruh/go-httpclient/gohttp"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 var client = getGithubClient()
@@ -16,6 +17,11 @@ type User struct {
 
 func getGithubClient() gohttp.HttpClient {
 	client := gohttp.New()
+
+	client.SetConnectionTimeout(20 * time.Second)
+	client.SetResponseTimeout(2 * time.Millisecond)
+	client.SetMaxIdleConnections(20)
+
 	commonHeaders := make(http.Header)
 	commonHeaders.Set("Authorization", "Bearer ABC-123")
 	client.SetHeaders(commonHeaders)
@@ -23,16 +29,15 @@ func getGithubClient() gohttp.HttpClient {
 }
 
 func main() {
-
 	getUrls()
 }
 func getUrls() {
-	resposne, err := client.Get("https://api.github.com", nil)
+	response, err := client.Get("https://api.github.com", nil)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(resposne.StatusCode)
-	bytes, _ := ioutil.ReadAll(resposne.Body)
+	fmt.Println(response.StatusCode)
+	bytes, _ := ioutil.ReadAll(response.Body)
 	fmt.Println(string(bytes))
 }
 
