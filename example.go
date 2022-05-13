@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/daruh/go-httpclient/gohttp"
-	"io/ioutil"
 	"time"
 )
 
@@ -37,9 +36,7 @@ func getUrls() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(response.StatusCode)
-	//bytes, _ := ioutil.ReadAll(response.Body)
-	//fmt.Println(string(bytes))
+	fmt.Println(response.Status())
 }
 
 func createUser(user User) {
@@ -48,6 +45,5 @@ func createUser(user User) {
 		panic(err)
 	}
 	fmt.Println(response.StatusCode)
-	bytes, _ := ioutil.ReadAll(response.Body)
-	fmt.Println(string(bytes))
+
 }
