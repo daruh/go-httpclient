@@ -12,6 +12,7 @@ type httpClient struct {
 	maxIdleConnection int
 	connectionTimeout time.Duration
 	responseTimeout   time.Duration
+	disableTimeouts   bool
 }
 
 func New() HttpClient {
@@ -24,6 +25,7 @@ type HttpClient interface {
 	SetConnectionTimeout(timeout time.Duration)
 	SetResponseTimeout(timeout time.Duration)
 	SetMaxIdleConnections(i int)
+	DisableTimeouts(disableTimeouts bool)
 
 	Get(url string, headers http.Header) (*http.Response, error)
 	Post(url string, headers http.Header, body interface{}) (*http.Response, error)
@@ -46,6 +48,10 @@ func (c *httpClient) SetResponseTimeout(timeout time.Duration) {
 
 func (c *httpClient) SetMaxIdleConnections(i int) {
 	c.maxIdleConnection = i
+}
+
+func (c *httpClient) DisableTimeouts(disableTimeouts bool) {
+	c.disableTimeouts = disableTimeouts
 }
 
 func (c *httpClient) Get(url string, headers http.Header) (*http.Response, error) {
