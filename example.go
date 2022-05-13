@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/daruh/go-httpclient/gohttp"
 	"io/ioutil"
+	"time"
 )
 
 var client = getGithubClient()
@@ -23,7 +24,13 @@ func getGithubClient() gohttp.Client {
 }
 
 func main() {
-	getUrls()
+
+	for i := 0; i < 20; i++ {
+		go func() {
+			getUrls()
+		}()
+	}
+	time.Sleep(20 * time.Second)
 }
 func getUrls() {
 	response, err := client.Get("https://api.github.com", nil)
@@ -31,8 +38,8 @@ func getUrls() {
 		panic(err)
 	}
 	fmt.Println(response.StatusCode)
-	bytes, _ := ioutil.ReadAll(response.Body)
-	fmt.Println(string(bytes))
+	//bytes, _ := ioutil.ReadAll(response.Body)
+	//fmt.Println(string(bytes))
 }
 
 func createUser(user User) {
