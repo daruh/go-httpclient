@@ -33,7 +33,6 @@ func (c httpClient) getRequestBody(contentType string, body interface{}) ([]byte
 }
 
 func (c *httpClient) do(method string, url string, headers http.Header, body interface{}) (*http.Response, error) {
-
 	fullHeaders := c.getRequestHeaders(headers)
 	requestBody, err := c.getRequestBody(fullHeaders.Get("Content-Type"), body)
 	request, err := http.NewRequest(method, url, bytes.NewBuffer(requestBody))
