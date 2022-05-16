@@ -19,6 +19,7 @@ func TestMain(m *testing.M) {
 func TestGetEndpoints(t *testing.T) {
 	t.Run("TestErrorFetchingFromGithub", func(t *testing.T) {
 		//init
+		gohttp.FlushMocks()
 		gohttp.AddMock(gohttp.Mock{
 			Method: http.MethodGet,
 			Url:    "https://api.github.com",
@@ -42,6 +43,7 @@ func TestGetEndpoints(t *testing.T) {
 	})
 
 	t.Run("TestUnmarshalResponseBody", func(t *testing.T) {
+		gohttp.FlushMocks()
 		gohttp.AddMock(gohttp.Mock{
 			Method:             http.MethodGet,
 			Url:                "https://api.github.com",
@@ -60,6 +62,7 @@ func TestGetEndpoints(t *testing.T) {
 	})
 
 	t.Run("TestNoError", func(t *testing.T) {
+		gohttp.FlushMocks()
 		gohttp.AddMock(gohttp.Mock{
 			Method:             http.MethodGet,
 			Url:                "https://api.github.com",

@@ -28,6 +28,12 @@ func StartMockServer() {
 func StopMockServer() {
 	mockupServer.enabled = false
 }
+func FlushMocks() {
+	mockupServer.serverMutex.Lock()
+	defer mockupServer.serverMutex.Unlock()
+
+	mockupServer.mocks = make(map[string]*Mock)
+}
 
 func AddMock(mock Mock) {
 	mockupServer.serverMutex.Lock()
