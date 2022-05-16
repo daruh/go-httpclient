@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"errors"
+	"github.com/daruh/go-httpclient/core"
+	"github.com/daruh/go-httpclient/gohttp_mock"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -33,7 +35,7 @@ func (c httpClient) getRequestBody(contentType string, body interface{}) ([]byte
 	}
 }
 
-func (c *httpClient) do(method string, url string, headers http.Header, body interface{}) (*Response, error) {
+func (c *httpClient) do(method string, url string, headers http.Header, body interface{}) (*core.Response, error) {
 	fullHeaders := c.getRequestHeaders(headers)
 	requestBody, err := c.getRequestBody(fullHeaders.Get("Content-Type"), body)
 	request, err := http.NewRequest(method, url, bytes.NewBuffer(requestBody))
@@ -41,8 +43,8 @@ func (c *httpClient) do(method string, url string, headers http.Header, body int
 		return nil, errors.New("unable to create a new request")
 	}
 
-	if mock := mockupServer.getMock(method, url, string(requestBody)); mock != nil {
-		return mock.getResponse()
+	if mock := gohttp_mock.MockupServer.GetMock(method, url, string(requestBody)); mock != nil {
+		return mock.GetResponse()
 	}
 
 	request.Header = fullHeaders
@@ -59,11 +61,11 @@ func (c *httpClient) do(method string, url string, headers http.Header, body int
 		return nil, err
 	}
 
-	finalResponse := Response{
-		status:     response.Status,
-		statusCode: response.StatusCode,
-		headers:    response.Header,
-		body:       responseBody,
+	finalResponse := core.Response{
+		Status:     response.Status,
+		StatusCode: response.StatusCode,
+		Headers:    response.Header,
+		Body:       responseBody,
 	}
 	return &finalResponse, nil
 }

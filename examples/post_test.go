@@ -2,7 +2,7 @@ package examples
 
 import (
 	"fmt"
-	"github.com/daruh/go-httpclient/gohttp"
+	"github.com/daruh/go-httpclient/gohttp_mock"
 	"net/http"
 	"testing"
 )
@@ -16,14 +16,14 @@ func TestPost(t *testing.T) {
 		Name: "testing_repo",
 	}
 
-	gohttp.AddMock(gohttp.Mock{
+	gohttp_mock.AddMock(gohttp_mock.Mock{
 		Method:             http.MethodPost,
 		Url:                "https://api.github.com",
 		ResponseBody:       `{"current_user_url": "123"}`,
 		ResponseStatusCode: http.StatusOK,
 	})
 
-	response, err := httpClient.Post("https://api.github.com", nil, repo)
+	response, err := httpClient.Post("https://api.github.com", repo, nil)
 
 	fmt.Println(err)
 	fmt.Println(response)
