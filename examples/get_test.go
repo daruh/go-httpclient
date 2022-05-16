@@ -28,7 +28,7 @@ func TestGetEndpoints(t *testing.T) {
 			t.Error("an error was expected")
 		}
 
-		if err.Error() != "timeout getting github endpoints" {
+		if err.Error() != "timeout getting github endpoint" {
 			t.Error("invalid error message received")
 		}
 	})
@@ -37,7 +37,7 @@ func TestGetEndpoints(t *testing.T) {
 		gohttp.AddMock(gohttp.Mock{
 			Method:             http.MethodGet,
 			Url:                "https://api.github.com",
-			ResponseBody:       `{"current_user_url": 123}`,
+			ResponseBody:       `{"current_user_url": "123"}`,
 			ResponseStatusCode: http.StatusOK,
 		})
 		endpoints, err := GetEndpoints()
@@ -49,10 +49,6 @@ func TestGetEndpoints(t *testing.T) {
 		if endpoints == nil {
 			t.Error("endpoints were expected and we got nil")
 		}
-		if err.Error() != "json unmarshal error" {
-			t.Error("invalid error message received")
-		}
-
 	})
 
 	t.Run("TestNoError", func(t *testing.T) {
@@ -70,9 +66,6 @@ func TestGetEndpoints(t *testing.T) {
 		}
 		if endpoints == nil {
 			t.Error("endpoints were expected and we got nil")
-		}
-		if err.Error() != "json unmarshal error" {
-			t.Error("invalid error message received")
 		}
 	})
 }

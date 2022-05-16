@@ -44,6 +44,6 @@ func createUser(user User) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(response.StatusCode)
+	fmt.Println(response.StatusCode())
 
 }

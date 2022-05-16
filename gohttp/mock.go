@@ -1,5 +1,10 @@
 package gohttp
 
+import (
+	"fmt"
+	"net/http"
+)
+
 type Mock struct {
 	Method      string
 	Url         string
@@ -8,4 +13,16 @@ type Mock struct {
 	Error              error
 	ResponseBody       string
 	ResponseStatusCode int
+}
+
+func (m *Mock) getResponse() (*Response, error) {
+	if m.Error != nil {
+		return nil, m.Error
+	}
+	response := Response{
+		status:     fmt.Sprintf("%d %s", m.ResponseStatusCode, http.StatusText(m.ResponseStatusCode)),
+		statusCode: m.ResponseStatusCode,
+		body:       []byte(m.ResponseBody),
+	}
+	return &response, nil
 }

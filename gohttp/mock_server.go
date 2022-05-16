@@ -3,7 +3,9 @@ package gohttp
 import "sync"
 
 var (
-	mockupServer = mockServer{}
+	mockupServer = mockServer{
+		mocks: make(map[string]*Mock),
+	}
 )
 
 type mockServer struct {
@@ -26,6 +28,14 @@ func StopMockServer() {
 func AddMock(mock Mock) {
 	mockupServer.serverMutex.Lock()
 	mockupServer.serverMutex.Unlock()
-	key := mock.Method + mock.Url + mock.RequestBody
+	key := mockupServer.getMockKey(mock.Method, mock.Url, mock.RequestBody)
 	mockupServer.mocks[key] = &mock
+}
+
+func (m *mockServer) getMockKey(method, url, body string) string {
+	return method + url + body
+}
+
+func (m *mockServer) getMock(method, url, body string) *Mock {
+	return m.mocks[m.getMockKey(method, url, body)]
 }
