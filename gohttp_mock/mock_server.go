@@ -5,21 +5,23 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/daruh/go-httpclient/core"
 	"strings"
 	"sync"
 )
 
 var (
 	MockupServer = mockServer{
-		mocks: make(map[string]*Mock),
+		mocks:      make(map[string]*Mock),
+		httpClient: &(httpClientMock{}),
 	}
 )
 
 type mockServer struct {
 	enabled     bool
 	serverMutex sync.Mutex
-
-	mocks map[string]*Mock
+	httpClient  core.HttpClient
+	mocks       map[string]*Mock
 }
 
 func StartMockServer() {
@@ -31,6 +33,15 @@ func StartMockServer() {
 func StopMockServer() {
 	MockupServer.enabled = false
 }
+
+func (m *mockServer) IsMockServerEnabled() bool {
+	return MockupServer.enabled
+}
+
+func (m *mockServer) GetMockedClient() core.HttpClient {
+	return m.httpClient
+}
+
 func FlushMocks() {
 	MockupServer.serverMutex.Lock()
 	defer MockupServer.serverMutex.Unlock()
