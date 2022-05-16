@@ -24,36 +24,36 @@ type mockServer struct {
 	mocks       map[string]*Mock
 }
 
-func StartMockServer() {
-	MockupServer.serverMutex.Lock()
-	defer MockupServer.serverMutex.Unlock()
-	MockupServer.enabled = true
+func (m *mockServer) Start() {
+	m.serverMutex.Lock()
+	defer m.serverMutex.Unlock()
+	m.enabled = true
 }
 
-func StopMockServer() {
-	MockupServer.enabled = false
+func (m *mockServer) Stop() {
+	m.enabled = false
 }
 
 func (m *mockServer) IsMockServerEnabled() bool {
-	return MockupServer.enabled
+	return m.enabled
 }
 
 func (m *mockServer) GetMockedClient() core.HttpClient {
 	return m.httpClient
 }
 
-func FlushMocks() {
-	MockupServer.serverMutex.Lock()
-	defer MockupServer.serverMutex.Unlock()
+func (m *mockServer) FlushMocks() {
+	m.serverMutex.Lock()
+	defer m.serverMutex.Unlock()
 
-	MockupServer.mocks = make(map[string]*Mock)
+	m.mocks = make(map[string]*Mock)
 }
 
-func AddMock(mock Mock) {
-	MockupServer.serverMutex.Lock()
-	MockupServer.serverMutex.Unlock()
-	key := MockupServer.getMockKey(mock.Method, mock.Url, mock.RequestBody)
-	MockupServer.mocks[key] = &mock
+func (m *mockServer) AddMock(mock Mock) {
+	m.serverMutex.Lock()
+	m.serverMutex.Unlock()
+	key := m.getMockKey(mock.Method, mock.Url, mock.RequestBody)
+	m.mocks[key] = &mock
 }
 
 func (m *mockServer) cleanBody(body string) string {

@@ -16,7 +16,7 @@ func TestPost(t *testing.T) {
 		Name: "testing_repo",
 	}
 
-	gohttp_mock.AddMock(gohttp_mock.Mock{
+	gohttp_mock.MockupServer.AddMock(gohttp_mock.Mock{
 		Method:             http.MethodPost,
 		Url:                "https://api.github.com",
 		ResponseBody:       `{"current_user_url": "123"}`,
