@@ -2,13 +2,21 @@ package examples
 
 import (
 	"errors"
+	"fmt"
 	"github.com/daruh/go-httpclient/gohttp"
 	"net/http"
+	"os"
 	"testing"
 )
 
-func TestGetEndpoints(t *testing.T) {
+func TestMain(m *testing.M) {
+	fmt.Println("About to start test cases for packages")
+	// Tell the HTTP library to mock any further requests from here
+	gohttp.StartMockServer()
+	os.Exit(m.Run())
+}
 
+func TestGetEndpoints(t *testing.T) {
 	t.Run("TestErrorFetchingFromGithub", func(t *testing.T) {
 		//init
 		gohttp.AddMock(gohttp.Mock{
@@ -68,4 +76,5 @@ func TestGetEndpoints(t *testing.T) {
 			t.Error("endpoints were expected and we got nil")
 		}
 	})
+	gohttp.StopMockServer()
 }
