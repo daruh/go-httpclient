@@ -24,9 +24,9 @@ func (c httpClient) getRequestBody(contentType string, body interface{}) ([]byte
 	}
 
 	switch strings.ToLower(contentType) {
-	case "application/json":
+	case ContentTypeJson:
 		return json.Marshal(body)
-	case "application/xml":
+	case ContentTypeXml:
 		return xml.Marshal(body)
 	default:
 		return json.Marshal(body)
